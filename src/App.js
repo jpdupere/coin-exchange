@@ -1,4 +1,3 @@
-import './App.css';
 import AccountBalance from './components/AccountBalance/AccountBalance'
 import React, { Component } from 'react';
 import CoinList from './components/CoinList/CoinList';
