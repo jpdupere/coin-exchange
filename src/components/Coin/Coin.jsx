@@ -21,6 +21,7 @@ export default class Coin extends Component {
                 <td>{this.props.name}</td>
                 <td>{this.props.ticker}</td>
                 <td>${this.props.price}</td>
+                <td><button>Refresh</button></td>
             </tr>
         )
     }
