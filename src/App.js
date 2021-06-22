@@ -25,8 +25,15 @@ class App extends Component {
     this.handleRefresh = this.handleRefresh.bind(this);
   }
   handleRefresh(valueChangeTicker) {
-    const coin = this.state.coinData.find(({ticker}) => ticker === valueChangeTicker)
-    console.log(coin);
+    const coinData = this.state.coinData.map(({name, ticker, price}) => {
+      let newPrice = price;
+      if (ticker === valueChangeTicker) {
+        const randomPct = 0.995 + Math.random() * 0.01;
+        newPrice = newPrice * randomPct;
+      }
+      return { ticker, name, price: newPrice }
+    })
+    this.setState({ coinData });
   }
   render() {
     return (
