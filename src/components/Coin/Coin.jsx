@@ -9,11 +9,13 @@ const Td = styled.td `
 
 export default class Coin extends Component {
     render() {
+        const balanceText = this.props.showBalance ? `${this.props.balance} ($${this.props.balance * this.props.price})` : '***** ($*****)'
         return (
             <tr>
                 <Td>{this.props.name}</Td>
                 <Td>{this.props.ticker}</Td>
                 <Td>${this.props.price}</Td>
+                <Td>{balanceText}</Td>
                 <Td><button onClick={() => this.props.handleRefresh(this.props.ticker)}>Refresh</button></Td>
             </tr>
         )
