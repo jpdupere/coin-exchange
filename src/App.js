@@ -22,13 +22,18 @@ class App extends Component {
         { name: 'Binance', ticker: 'BNB', price: 300.00 },
       ]
     }
+    this.handleRefresh = this.handleRefresh.bind(this);
+  }
+  handleRefresh(valueChangeTicker) {
+    const coin = this.state.coinData.find(({ticker}) => ticker === valueChangeTicker)
+    console.log(coin);
   }
   render() {
     return (
       <Div>
         <Header />
         <AccountBalance amount={this.state.balance} />
-        <CoinList coinData={this.state.coinData} />
+        <CoinList coinData={this.state.coinData} handleRefresh={this.handleRefresh} />
       </Div>
     );
   }
