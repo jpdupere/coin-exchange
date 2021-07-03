@@ -24,24 +24,30 @@ class App extends Component {
   }
   async componentDidMount() {
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    const coinData = response.data.slice(0, 20).map(({ id, name, symbol}) => {
+    const coinIds = response.data.slice(0, 10   ).map((coin) => coin.id);
+    const promises = coinIds.map((coinId) => axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`));
+    const coinData = await Promise.all(promises);
+    const coinPriceData = coinData.map(response => {
+      const coin = response.data;
       return {
-        key: id,
-        name,
-        ticker: symbol,
+        key: coin.id,
+        name: coin.name,
+        ticker: coin.symbol,
+        balance: 0,
+        price: parseFloat(coin.quotes.USD.price),
       }
-    });
-    this.setState({ coinData });
-    console.log('component did mount');
+    })
+    this.setState({ coinData: coinPriceData });
   }
-  handleRefresh(valueChangeTicker) {
-    const coinData = this.state.coinData.map(({name, ticker, price, balance}) => {
+  handleRefresh(coinId) {
+    debugger;
+    const coinData = this.state.coinData.map(async ({key, name, ticker, price, balance}) => {
       let newPrice = price;
-      if (ticker === valueChangeTicker) {
-        const randomPct = 0.995 + Math.random() * 0.01;
-        newPrice = newPrice * randomPct;
+      if (coinId === key) {
+        const response = await axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`);
+        newPrice = parseFloat(response.data.quotes.USD.price);
       }
-      return { ticker, name, price: newPrice, balance }
+      return { key, ticker, name, price: newPrice, balance }
     })
     this.setState({ coinData });
   }
