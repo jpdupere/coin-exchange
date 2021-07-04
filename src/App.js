@@ -39,16 +39,16 @@ class App extends Component {
     })
     this.setState({ coinData: coinPriceData });
   }
-  handleRefresh(coinId) {
-    debugger;
-    const coinData = this.state.coinData.map(async ({key, name, ticker, price, balance}) => {
+  handleRefresh = async (coinId) => {
+    const response = await axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`);
+    const coinPrice = parseFloat(response.data.quotes.USD.price);
+    const coinData = this.state.coinData.map(({key, name, ticker, price, balance}) => {
       let newPrice = price;
       if (coinId === key) {
-        const response = await axios.get(`https://api.coinpaprika.com/v1/tickers/${coinId}`);
-        newPrice = parseFloat(response.data.quotes.USD.price);
+        newPrice = coinPrice;
       }
       return { key, ticker, name, price: newPrice, balance }
-    })
+    });
     this.setState({ coinData });
   }
   handleToggleShowBalance() {

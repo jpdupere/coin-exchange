@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -15,25 +15,22 @@ const TdCurr = styled.td `
     padding: 0 1rem 0 1rem;
 `
 const usd = (number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4 }).format(number);
 }
-export default class Coin extends Component {
-    render() {
-        const balanceText = this.props.showBalance ? `${this.props.balance} (${usd(this.props.balance * this.props.price)})` : '***** ($*****)'
-        return (
-            <tr>
-                <Td>{this.props.name}</Td>
-                <Td>{this.props.ticker}</Td>
-                <TdCurr>{usd(this.props.price)}</TdCurr>
-                <TdCurr>{balanceText}</TdCurr>
-                <Td><button onClick={() => this.props.handleRefresh(this.props.key)}>Refresh</button></Td>
-            </tr>
-        )
-    }
+export default function Coin(props) {
+    const balanceText = props.showBalance ? `${props.balance} (${usd(props.balance * props.price)})` : '***** ($*****)'
+    return (
+        <tr>
+            <Td>{props.name}</Td>
+            <Td>{props.ticker}</Td>
+            <TdCurr>{usd(props.price)}</TdCurr>
+            <TdCurr>{balanceText}</TdCurr>
+            <Td><button onClick={() => props.handleRefresh(props.coinId)}>Refresh</button></Td>
+        </tr>
+    )
 }
 
 Coin.propTypes = {
-    key: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     ticker: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
